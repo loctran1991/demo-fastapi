@@ -30,6 +30,3 @@ app.include_router(auth.router)
 @app.get("/")
 def root():
     return {"message": "Hello World pushing out to ubuntu"}
-
-if __name__ == "__main__":
-    uvicorn.run("main:app", host="localhost", port=6000, reload=True)
