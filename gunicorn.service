@@ -1,0 +1,14 @@
+[Unit]
+Description=Demo FastAPI
+After=network.target
+
+[Service]
+User=luketran
+Group=luketran
+WorkingDirectory=/home/luketran/app/src/
+Environment="PATH=/home/luketran/app/venv/bin"
+EnvironmentFile=/home/luketran/.env
+ExecStart=/home/luketran/app/venv/bin/gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:5000
+
+[Install]
+WantedBy=multi-user.target
