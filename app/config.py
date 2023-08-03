@@ -10,6 +10,6 @@ class Settings(BaseSettings):
     algorithm: str
     access_token_expire_minutes: int
     class Config:
-        env_file = ".env"
+        env_file = "/home/luketran/.env"
     
 settings = Settings()
