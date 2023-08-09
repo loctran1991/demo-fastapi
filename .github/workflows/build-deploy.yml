@@ -10,5 +10,17 @@ jobs:
   job1:
     runs-on: ubuntu-latest
     steps:
-      - name: pulling git repository
+      - name: Pulling git repository
         uses: actions/checkout@v3
+      - name: Install python 3.11
+        uses: actions/checkout@v3
+        with:
+          python-version: "3.11"
+      - name: Update PIP
+        run: python -m pip install --upgrade pip
+      - name: Install requirements
+        run: pip install -r requirements.txt
+      - name: Run Pytest
+        run: |
+          pip install pytest
+          pytest
