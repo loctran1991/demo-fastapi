@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, conint # pylint: disable=import-error
+from pydantic import BaseModel, EmailStr, conint # pylint: disable=no-name-in-module
 from datetime import datetime
 from typing import Optional
 
@@ -42,7 +42,6 @@ class PostOut(BaseModel):
 class UserCreate(BaseModel):
     email: EmailStr
     password: str
-    phone_number: str
 
     
 class Token(BaseModel):

@@ -1,10 +1,10 @@
-import uvicorn
 from fastapi import FastAPI
 from routers import posts, users, auth, vote
 from fastapi.middleware.cors import CORSMiddleware
 
 #If we have existing table, command will not run
 #Only create table name if it doesn't exist
+
 #models.Base.metadata.create_all(bind=engine) -> When you use alembic, you dont have to use this command
 
 app = FastAPI()

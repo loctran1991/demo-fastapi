@@ -1,0 +1,9 @@
+# comment
+__pycache__
+*/__pycache__
+.pytest_cache
+app/calculations.py
+tests
+gunicorn.service
+nginx
+Procfile

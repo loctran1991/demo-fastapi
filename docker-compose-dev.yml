@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  api:
+    build: . # = docker build .
+    depends_on:
+      - postgres
+    ports:
+      - 5000:5000
+    volumes:
+      - ./:/user/src/app:ro #sync when we have changed source code to container app folder
+    command: uvicorn main:app --host 0.0.0.0 --port 5000 --reload #overrid cmd in Dockerfile when we have changed code
+    environment:
+      - DATABASE_HOSTNAME=localhost
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=postgres
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=$_Luke%1991
+      - SECRET_KEY=09d25e094faa6ca2556c818166b0a9563b93f7099f6f0f4caa6cf63b88e8a3e7
+      - ALGORITHM=HS256
+      - ACCESS_TOKEN_EXPIRE_MINUTES=60
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD="$_Luke%1991"
+      - POSTGRES_DB=postgres
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+
+volumes:
+  postgres-db:
