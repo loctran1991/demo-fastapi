@@ -106,7 +106,9 @@ jobs:
           host: ${{secrets.CENTOS_HOST}}
           username: ${{secrets.CENTOS_USERNAME}}
           password: ${{secrets.CENTOS_PASSWORD}}
+          #because my password has special characters, I have to put it in ''
           script: |
             cd app/src
             git pull
-            echo ${{secrets.CENTOS_PASSWORD}} | sudo -S systemctl restart api
+            echo '${{secrets.CENTOS_PASSWORD}}' | sudo systemctl restart api
+            systemctl status api
