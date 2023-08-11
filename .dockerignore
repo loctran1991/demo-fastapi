@@ -3,7 +3,7 @@ __pycache__
 */__pycache__
 .pytest_cache
 app/calculations.py
-tests
+tests/test_calculations.py
 gunicorn.service
 nginx
 Procfile
