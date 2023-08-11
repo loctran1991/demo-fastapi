@@ -101,7 +101,7 @@ jobs:
 
          #deploy code to server
       - name: Deploy code to a centos 8 on digital
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{secrets.CENTOS_HOST}}
           username: ${{secrets.CENTOS_USERNAME}}
