@@ -13,7 +13,7 @@ import pytest
 
 postgres_pwd = urllib.parse.quote_plus(settings.database_password)
 
-SQLALCHEMY_DATABASE_URL = f'postgresql://{settings.database_username}:{postgres_pwd}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}_test'
+SQLALCHEMY_DATABASE_URL = f'postgresql://{settings.database_username}:{postgres_pwd}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}'
 
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
