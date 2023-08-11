@@ -101,11 +101,11 @@ jobs:
 
          #deploy code to server
       - name: Deploy code to a centos 8 on digital
-        uses: appleboy/ssh-action@v1.0.0
+        uses: appleboy/ssh-action@master
         with:
           host: ${{secrets.CENTOS_HOST}}
           username: ${{secrets.CENTOS_USERNAME}}
-          password: ${{secrets.CENTOS_PASSWORD}}
+          key: ${{secrets.CENTOS_KEY}}
           #because my password has special characters, I have to put it in ''
           script: |
             cd app/src
