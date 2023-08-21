@@ -1,0 +1,59 @@
+name: Build to K8s DigitalOcean
+on:
+  push:
+    branches:
+      - "main"
+  pull_request:
+    branches:
+      - "main"
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pulling git repository
+        uses: actions/checkout@v3
+
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+
+      
+      - name: Save DigitalOcean kubeconfig with short-lived credentials
+        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 1e863feb-df3e-44bd-a1b2-643f5b4ec881
+
+      
+      - name: Deploy API App to DigitalOcean Kubernetes
+        run: kubectl apply -f $GITHUB_WORKSPACE/manifest/app
+
+      - name: Deploy Ingress Controller
+        run: |
+          kubectl apply -f $GITHUB_WORKSPACE/manifest/ingress-controller/crds/k8s.nginx.org_virtualservers.yaml
+          kubectl apply -f $GITHUB_WORKSPACE/manifest/ingress-controller/crds/k8s.nginx.org_virtualserverroutes.yaml
+          kubectl apply -f $GITHUB_WORKSPACE/manifest/ingress-controller/crds/k8s.nginx.org_transportservers.yaml
+          kubectl apply -f $GITHUB_WORKSPACE/manifest/ingress-controller/crds/k8s.nginx.org_policies.yaml
+          kubectl apply -f $GITHUB_WORKSPACE/manifest/ingress-controller/common
+          kubectl apply -f $GITHUB_WORKSPACE/manifest/ingress-controller/daemon-set
+          kubectl apply -f $GITHUB_WORKSPACE/manifest/ingress-controller/service
+
+      - name: Install Cert-Manager
+        run: | #kubectl create ns cert-manager
+          kubectl apply -f $GITHUB_WORKSPACE/manifest/cert-manager/crds
+          kubectl apply -f $GITHUB_WORKSPACE/manifest/cert-manager/install
+
+      - name: Deploy Ingress with LetsEncrypt
+        run: |
+          kubectl apply -f $GITHUB_WORKSPACE/manifest/ingress-resource/issuer-cluster.yaml
+          kubectl apply -f $GITHUB_WORKSPACE/manifest/ingress-resource/ingress-host.yaml
+
+      - name: Check and update DNS record for services
+        env:
+          ip_loadbalancer: ""
+        run: |
+          echo "$ip_loadbalancer=$(kubectl -n nginx-ingress get svc nginx-ingress --output jsonpath='{.status.loadBalancer.ingress[*].ip}')"
+          doctl compute domain records create luketran.xyz --record-type A --record-name fastapi --record-data $ip_loadbalancer
+
+
+
+      
+
