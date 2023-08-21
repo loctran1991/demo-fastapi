@@ -50,8 +50,8 @@ jobs:
         env:
           ip_loadbalancer: ""
         run: |
-          kubectl -n nginx-ingress get svc nginx-ingress --output jsonpath='{.status.loadBalancer.ingress[*].ip}' > $ip_loadbalancer
-          doctl compute domain records create luketran.xyz --record-type A --record-name fastapi --record-data $ip_loadbalancer
+          kubectl -n nginx-ingress get svc nginx-ingress --output jsonpath='{.status.loadBalancer.ingress[*].ip}' > ${{ env.ip_loadbalancer}}
+          doctl compute domain records create luketran.xyz --record-type A --record-name fastapi --record-data ${{ env.ip_loadbalancer}}
 
 
 
