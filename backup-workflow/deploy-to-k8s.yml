@@ -47,11 +47,8 @@ jobs:
           kubectl apply -f $GITHUB_WORKSPACE/manifest/ingress-resource/ingress-host.yaml
 
       - name: Check and update DNS record for services
-        env:
-          ip_loadbalancer: ""
         run: |
-          echo "$ip_loadbalancer=$(kubectl -n nginx-ingress get svc nginx-ingress --output jsonpath='{.status.loadBalancer.ingress[*].ip}')"
-          doctl compute domain records create luketran.xyz --record-type A --record-name fastapi --record-data $ip_loadbalancer
+          doctl compute domain records create luketran.xyz --record-type A --record-name fastapi --record-data $(kubectl -n nginx-ingress get svc nginx-ingress --output jsonpath='{.status.loadBalancer.ingress[*].ip}')
 
 
 
