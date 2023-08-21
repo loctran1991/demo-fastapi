@@ -1,4 +1,4 @@
-name: Build and Deploy Code
+name: Build to K8s DigitalOcean
 on:
   push:
     branches:
