@@ -37,7 +37,6 @@ jobs:
 
       - name: Install Cert-Manager
         run: |
-          kubectl create ns cert-manager
           kubectl apply -f $GITHUB_WORKSPACE/manifest/cert-manager/crds
           kubectl apply -f $GITHUB_WORKSPACE/manifest/cert-manager/install
 
