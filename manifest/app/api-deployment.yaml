@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastapi  # Sets Deployment name
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fastapi
+  template:
+    metadata:
+      labels:
+        app: fastapi
+    spec:
+      containers:
+        - name: fastapi
+          image: loctran1991/fastapi:api_v1 # Sets Image
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5000  # Exposes container port
+          env: #please read, difference between env - envFrom
+            - name: DATABASE_HOSTNAME
+              value: postgres-service
+            - name: DATABASE_PORT
+              value: '5432'
+          envFrom:
+            - secretRef:
+                name: mysecret
