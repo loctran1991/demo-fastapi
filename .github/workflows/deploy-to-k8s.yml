@@ -9,6 +9,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      ip: kubectl -n nginx-ingress get svc nginx-ingress --output jsonpath='{.status.loadBalancer.ingress[*].ip}'
     steps:
       - name: Pulling git repository
         uses: actions/checkout@v3
@@ -36,7 +38,7 @@ jobs:
           kubectl apply -f $GITHUB_WORKSPACE/manifest/ingress-controller/daemon-set
 
       - name: Install Cert-Manager
-        run: |
+        run: | #kubectl create ns cert-manager
           kubectl apply -f $GITHUB_WORKSPACE/manifest/cert-manager/crds
           kubectl apply -f $GITHUB_WORKSPACE/manifest/cert-manager/install
 
@@ -47,8 +49,7 @@ jobs:
 
       - name: Check and update DNS record for services
         run: |
-          ip=kubectl -n nginx-ingress get svc nginx-ingress --output jsonpath='{.status.loadBalancer.ingress[*].ip}'
-          doctl compute domain records create luketran.xyz --record-type A --record-name fastapi --record-data $ip
+          doctl compute domain records create luketran.xyz --record-type A --record-name fastapi --record-data { kubectl -n nginx-ingress get svc nginx-ingress --output jsonpath='{.status.loadBalancer.ingress[*].ip}' }
 
 
 
